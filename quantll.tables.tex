@@ -1,0 +1,30 @@
+\documentclass{article}
+\usepackage{booktabs,dcolumn,caption}
+\captionsetup{skip=0.333\baselineskip}
+\newcolumntype{d}[1]{D{.}{.}{#1}}
+\newcommand\mc[1]{\multicolumn{1}{@{}c@{}}{#1}} % handy shortcut macro
+
+\begin{document}
+\begin{table}
+\caption*{Table 1. Descriptive Statistics by Linguistic Isolation Percentile}
+\centering
+\begin{tabular}{@{} l *{2}{d{2.4}d{2.2}d{2.4}} @{}}
+\toprule
+Variables & \multicolumn{3}{c}{0-50th Percentiles} & \multicolumn{3}{c@{}}{51st-100th Percentiles} \\ 
+\cmidrule(l){2-4} \cmidrule(l){5-7}
+\cmidrule(lr){2-3} \cmidrule{4-4} \cmidrule(lr){5-6} \cmidrule{7-7}
+& \mc{1st Quart.} & \mc{Mean} & \mc{3rd Quart.} & \mc{1st Quart.} & \mc{Mean} & \mc{3rd Quart.} \\ 
+\midrule
+Linguistic Isolation & 1.50 & 3.31 & 5.00 & 11.00 & 17.95 & 22.30 \\
+Eviction Rate & 0.6775 & 2.0618 & 2.9100 & 0.87 & 2.19 & 2.96 \\
+Eviction Filing Rate & 0.830 & 2.421 & 3.410 & 1.060 & 2.498 & 3.35 \\
+Income to Rent Ratio & 44.413 & 54.983 & 61.789 & 35.796 & 44.401 & 50.262 \\
+Educational Attainment & 3.900 & 9.529 & 13.200 & 15.40 & 28.77 & 40.70 \\
+Incarcerated Parents & 0.0024 & 0.0121 & 0.0195 & 0.006 & 0.014 & 0.2082 \\
+Single Parent Households & 0.1511 & 0.2607 & 0.2187 & 0.3306 & 0.2 & 0.4327 \\
+Mean Commute Time & 24.572 & 28.977 & 32.785 & 26.41 & 29.59 & 32.68 \\
+Pollution Burden & 29.063 & 37.934 & 46.171 & 37.041 & 45.958 & 54.776 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{document}
