@@ -1,4 +1,4 @@
-#Image 1
+##Image 1
 library(tidyverse, ggplot2)
 #Readjust default settings for alignment of title
 theme_update(plot.title = element_text(hjust = 0.5))
@@ -14,3 +14,15 @@ x <- ggplot(data = mart_data, aes(x= Outlet_Identifier, y=Item_Outlet_Sales)) +
 
 #Print ggplot object
 print(x)
+
+
+##Image 2
+ggplot(data=mart_data, aes(x=Item_Visibility, y=Item_MRP, colour=Item_Type)) +
+  geom_point() +
+  facet_wrap(~Item_Type) +
+  theme_bw() +
+  ggtitle('MRP versus Visibility by Item Type') +
+  xlab('Item Visibility') +
+  ylab('Item MRP') +
+  scale_y_continuous(breaks=seq(0,270,30)) +
+  scale_x_continuous(breaks=seq(0,0.30,0.05))
