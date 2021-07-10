@@ -35,3 +35,14 @@ ggplot(data=mart_data, aes(x=Outlet_Location_Type, fill=Outlet_Type)) +
   ggtitle('Stacked Bar Chart') +
   ylab('Count of Outlets') +
   xlab('Outlet Location Type')
+
+#Image 4
+ggplot(mart_data, aes(x=log(Item_Outlet_Sales))) + 
+  geom_freqpoly(aes(color = Outlet_Size), binwidth=0.05) +
+  theme_bw() +
+  labs(
+    x='Count of Sales',
+    y='Log10 of Outlet Sales'
+  ) +
+  scale_y_continuous(breaks=seq(0,100,10), labels=seq(0,100,10), limits= c(0,100)) +
+  theme(text=element_text(family = 'NimbusMon'))
