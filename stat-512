@@ -1,0 +1,16 @@
+#Image 1
+library(tidyverse, ggplot2)
+#Readjust default settings for alignment of title
+theme_update(plot.title = element_text(hjust = 0.5))
+
+#Create ggplot object
+x <- ggplot(data = mart_data, aes(x= Outlet_Identifier, y=Item_Outlet_Sales)) +
+  geom_boxplot(fill='#F8766D', color="black") +
+  scale_y_continuous(breaks=seq(0,13500,500)) +
+  labs(title = 'Box Plot') +
+  xlab('Outlet Identifier') +
+  ylab('Item Outlet Sales') +
+  theme_bw() 
+
+#Print ggplot object
+print(x)
