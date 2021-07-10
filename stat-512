@@ -26,3 +26,12 @@ ggplot(data=mart_data, aes(x=Item_Visibility, y=Item_MRP, colour=Item_Type)) +
   ylab('Item MRP') +
   scale_y_continuous(breaks=seq(0,270,30)) +
   scale_x_continuous(breaks=seq(0,0.30,0.05))
+
+
+##Image 3
+ggplot(data=mart_data, aes(x=Outlet_Location_Type, fill=Outlet_Type)) +
+  geom_bar() +
+  theme_bw() +
+  ggtitle('Stacked Bar Chart') +
+  ylab('Count of Outlets') +
+  xlab('Outlet Location Type')
