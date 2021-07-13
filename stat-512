@@ -1,3 +1,4 @@
+##########################Lab 1##########################
 ##Image 1
 library(tidyverse, ggplot2)
 #Readjust default settings for alignment of title
@@ -47,3 +48,61 @@ ggplot(mart_data, aes(x=Item_Outlet_Sales)) +
   ) +
   scale_y_continuous(breaks=seq(0,100,10), labels=seq(0,100,10), limits= c(0,100)) 
 
+
+##########################Lab 2##########################
+##Question 1 
+#Calculate total number of delays
+flights <- flights %>% #Calculate total number of delays
+  mutate(total_delays = arr_delay + dep_delay) 
+
+#Group by time and drop group structure
+flight_day <- flights %>%
+  group_by(hour, minute) %>% 
+  summarise(n(), .groups = 'drop') 
+  
+#Rename to use with order function
+flight_day <- flight_day %>% 
+  rename(count_delay = 'n()')
+
+#Order smallest to largest
+flight_day <- flight_day[with(flight_day, order(count_delay)), ] 
+
+
+##Question 2
+flights_sum_two <- flights %>%
+  group_by(dest) %>%
+  summarise_at(vars(arr_delay), list(name = sum), na.rm=TRUE) 
+
+#Join dataframe generated in previous task to flights dataframe.  
+complete_file <- left_join(flights, flights_sum_two, by = "dest")
+complete_file <- complete_file %>%
+  mutate(delay_prop = arr_delay / name)
+  
+ 
+##Question 3
+ flights <- flights %>%
+  mutate(lag_delay = lag(dep_delay))
+cor_delay <- cor.test(flights$dep_delay, flights$lag_delay, 
+                      method = 'spearman')
+                      
+
+##Question 4
+flight_dest <- flights %>%
+  group_by(dest) %>%
+  summarise(count = n_distinct(carrier)) %>%
+  filter(count >= 2)
+
+
+##Question 5
+flights_sus <- flights %>%
+  group_by(dest, origin) %>%
+  summarise(
+    max_time = max(air_time, na.rm=TRUE),
+    min_time = min(air_time, na.rm=TRUE)
+  ) %>%
+  mutate(max_time - min_time)
+ 
+flights_sus <- flights_sus %>%
+  mutate(difference = max_time - min_time) %>%
+  mutate(multipel = max_time / min_time)
+sort(desc(flights_sus$multipel))
