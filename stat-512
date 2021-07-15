@@ -86,14 +86,16 @@ minute -- Time of scheduled departure
 time_hour -- Scheduled date and hour of flight 
 ##Question 1: What time of day should you fly if you want to avoid delays as much as possible? complete
 ```{r}
-#Calculate total number of delays
-flights <- flights %>% #Calculate total number of delays
+
+#Calculate total time  of delays. Don't eliminate negative values because 
+flight_total_delays <- flights %>% 
+  dplyr::group_by(origin) %>%
   mutate(total_delays = arr_delay + dep_delay) 
 
 #Group by time and drop group structure
 flight_day <- flights %>%
   dplyr::group_by(hour, minute) %>% 
-  dplyr::summarise(n(), .groups = 'drop') 
+  dplyr::summarise(n(arr_delay, ), .groups = 'drop') 
   
 #Rename to use with order function
 flight_day <- flight_day %>% 
@@ -106,14 +108,21 @@ flight_day <- flight_day[with(flight_day, order(count_delay)), ]
 ```
 
 
-##Question 2: For each destination, compute the total minutes of arrival delay. For each flight, compute the proportion of the arrival delay for its destination. Complete
+##Question 2: For each destination, compute the total minutes of arrival delay. For each flight, compute the proportion of the arrival delay for its destination. 
 ```{r}
+#For the first part, I filter away negative values for delay. This is because when we sum delays, a negative value would subtract from the true amount of delay. After that, we sum the total arrival delay by the destination. 
+flight_positive <- flights %>%
+  filter(arr_delay > 0)
+
 #Group by destination and obtain sum of arrival delays
-flights_sum_two <- flights %>% 
+flights_sum_two <- flight_positive %>% 
   #Group by destination
   group_by(dest) %>% 
   #Summarize the sum of arrival delay by destination
   summarise_at(vars(arr_delay), list(name = sum), na.rm=TRUE) 
+
+
+#For the second part, I joined the first dataframe, which contains the total arrival delay for each airport over all time periods. It was merged by flight, so each flight observation has the total amount of arrival delay at their respective airport. I then divided the arrival delay for that flight by the total delay for the airport. 
 
 #Join dataframe generated in previous task to flights dataframe. 
 complete_file <- left_join(flights, flights_sum_two, by = "dest")
@@ -125,7 +134,11 @@ complete_file <- complete_file %>%
 
 ##Question 3: Delays are typically temporally correlated: even once the problem that caused the initial delay has been resolved, later flights are delayed to allow earlier flights to leave. Using the function lag(), explore how the departure delay of a flight is related to the delay of the immediately preceding flight. 
 ```{r}
-
+#Here we are arranging the flights by the origin and time of departure. Then, they are grouped by origin. Then a variable is created for the lag of depatureTime. It appears that the time of departure, particularly for late plans, is correlated with the time of depature for the previous plane.
+flight_lag <- flights %>%
+  dplyr::arrange(origin, departureTime) %>%
+  dplyr::group_by(origin) %>%
+  dplyr::mutate(lag_time = dplyr::lag(departureTime))
 ```
 
 ##Question 4: Find all destinations that are flown by at least two carriers. (hint: use n_distinct()) 
@@ -143,6 +156,10 @@ flight_dest <- flights %>%
 
 ##Question 5: Look at each destination. Can you find flights that are suspiciously fast? (i.e. flights that represent a potential data entry error). Compute the air time of a flight relative to the shortest flight to that destination. Which flights were most delayed in the air? Complete
 ```{r}
+#I find the minimum and maximum air time and convert it to hours. Then I calculate the MPH for each flight and look over the dataset to identify flights that are very slow. I used MPH instead of z score because their are outliers within the dataset towards the max speed side. This is demonstrated in the visualization, where it is clear that there is a right skew to the data and appears to be trimodal.
+#Visualization
+ggplot(data = flights, aes(x=log(air_time))) + 
+  geom_density()
 #Create a new dataframe that identifies the flights that were took the shortest time and the longest time by destination and origin
 flights_sus <- flights %>%
 #Group by flight path (destination and origin) and include distance (This won't impact the destination and origin because those should be constant)
@@ -157,9 +174,7 @@ flights_sus <- flights %>%
          min_time_hours = min_time / 60,
          speed_low = distance / max_time_hours,
          speed_high = distance / min_time_hours) 
-  
-
-
 
 #Answer: The flights from LGA to EWR average 0 MPH, which was the largest outlier. The other suscpicious flights include PHL to LGA, ACK to JFK, PHL to JFK, and DCA to LGA. The minimum time of these flew under 100 MPH. 
+
 ```
