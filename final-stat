@@ -1,0 +1,13 @@
+##Import Datasets
+```{r}
+vital_signs <- read_csv("~/Desktop/stats_r/Final_Project_data/VitalSigns.csv")
+death_data <- read_csv("~/Desktop/stats_r/Final_Project_data/DeathData.csv")
+fvc <- read_csv("~/Desktop/stats_r/Final_Project_data/Fvc.csv")
+demographics <- read_csv("~/Desktop/stats_r/Final_Project_data/demographics.csv")
+labs <- read_csv("~/Desktop/stats_r/Final_Project_data/Labs.csv")
+adverse_events <- read_csv("~/Desktop/stats_r/Final_Project_data/AdverseEvents.csv")
+svc <- read_csv("~/Desktop/stats_r/Final_Project_data/Svc.csv")
+als_history <- read_csv("~/Desktop/stats_r/Final_Project_data/AlsHistory.csv")
+riluzole <- read_csv("~/Desktop/stats_r/Final_Project_data/Riluzole.csv")
+treatment <- read_csv("~/Desktop/stats_r/Final_Project_data/Treatment.csv")
+```
