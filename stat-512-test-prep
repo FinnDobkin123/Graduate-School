@@ -1,0 +1,95 @@
+##Question 2: Transform a data frame then export
+#write a helper function to use in the transformations
+# Review R function syntax and control flow
+#transform columns for a specific data type
+# What functions are there in R to check data type?
+#modify the column names
+# Review R functions for basic string operations
+#arrange the data by a new variable
+#export file
+#Either csv or R object
+
+#Helper ifelse
+fun_one <- function(grouping_variable, analysis_variable) {
+  if(is.numeric(grouping_variable)) {
+      break
+  if(is.character(analysis_variable))
+      break
+    } else {
+      group_by(grouping_variable) %>%
+      summarise(total_variable = sum(analysis_variable)) 
+    }
+}
+
+
+#Works
+fun_four <- function(df, group_var, analyzis_var) {
+    if(is.numeric(vector))
+      break
+    group_var <- enquo(group_var)
+    df %>%
+      dplyr::group_by(!!group_var) %>%
+      dplyr::summarise(max_var = max(analyzis_var))
+    }
+  
+#Works
+new_df <- diamond %>%
+  dplyr::group_by(carat) %>%
+  dplyr::summarise(min_price = min(price),
+                   max_price = max(price)) %>%
+  arrange(min_price) %>%
+  rename(
+    minimum_cost= min_price,
+    maximum_cost = max_price
+  )
+
+##Question 3: Data Aggregation
+#Import a provided dataset
+#Aggregate the data and compute a summary statistics
+#Learn about the function round()
+#Be familiar with NA related functions
+diamond_analysis <- diamonds %>%
+  dplyr::group_by(cut) %>%
+  dplyr::summarise(sum_carat = sum(carat, na.rm = FALSE))
+
+
+##Question 4: Data Analysis
+#Visualize an association between 2 variables
+#Review different plot types for various combinations of quantitative and categorical variables
+#Provide a statistic to accompany the visualization(s)
+#Review summary statistics that might be used for various combinations of quantitative and categorical variables
+#Write a paragraph interpreting the results
+#Make sure to use proper statistical language
+library(ggplot2)
+ggplot(diamonds, aes(x=carat, y=price)) + 
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10() +
+  theme_bw() + 
+  labs(
+    title = "Relationship between Diamond Price and Diamond Carat",
+    caption = "Note: X and Y Axis are on a log scale",
+    x= "Carat",
+    y = "Price"
+  )
+  
+#Analysis
+kruskal.test(cut ~ price, data = diamonds)
+one.way <- aov(cut ~ price, data = diamonds)
+prop.table(table(diamonds$price, diamonds$cut, margin = 2))
+
+
+#Question 5: Identify atypical observations defined by one or more conditions
+#Review ifelse()
+#Parametric z-score
+diamond <- diamond %>%
+  mutate(price_z = (price - mean(price))/sd(price)) 
+diamond <- diamond %>%
+  mutate(outlier = ifelse(price_z > 2.326 | price_z < - 2.326, 1, 0))
+
+#Non-parametric -- data is non-normal distribution
+ggplot(diamond, aes(x = log(price_z))) +
+  geom_bar(binwidth=10)
+
+
+
